@@ -1,6 +1,15 @@
-import Head from 'next/head'
+import Head from "next/head";
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+}
 
 export default function Home() {
+  const [tieBreaker, setTieBreaker] = React.useState(0);
+  console.log(tieBreaker);
+
   return (
     <div className="container">
       <Head>
@@ -9,55 +18,32 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
+        <p className="description">Place the Pokémon in the rectangles.</p>
+        <div>
+          <button
+            onClick={() => setTieBreaker(getRandomInt(1, 3))}
+            style={{ marginRight: 16 }}
+            type="button"
+          >
+            TIE BREAKER
+          </button>
+          <button onClick={() => setTieBreaker(0)} type="button">
+            DONE
+          </button>
+        </div>
 
         <div className="grid">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+          <div className={"card" + (tieBreaker === 1 ? " shake" : "")}>
+            <h3>Pokémon</h3>
+            {tieBreaker === 1 ? <p>Winner!</p> : null}
+          </div>
 
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="card"
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="card"
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+          <div className={"card" + (tieBreaker === 2 ? " shake" : "")}>
+            <h3>Pokemon</h3>
+            {tieBreaker === 2 ? <p>Winner!</p> : null}
+          </div>
         </div>
       </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
-        </a>
-      </footer>
 
       <style jsx>{`
         .container {
@@ -74,25 +60,6 @@ export default function Home() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
           justify-content: center;
           align-items: center;
         }
@@ -138,33 +105,50 @@ export default function Home() {
             DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
         }
 
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
+        button {
+          background-color: #c63610;
+          border: none;
+          border-radius: 8px;
+          color: #ffffff;
+          display: inline;
+          padding: 8px 16px;
+          font-size: 24px;
+          font-weight: bold;
+        }
 
-          max-width: 800px;
+        .grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+
+          width: 700px;
           margin-top: 3rem;
         }
 
         .card {
+          height: 440px;
           margin: 1rem;
           flex-basis: 45%;
           padding: 1.5rem;
-          text-align: left;
-          color: inherit;
+          text-align: center;
+          color: #ffe252;
           text-decoration: none;
-          border: 1px solid #eaeaea;
+          background-color: #1a8348;
+          border: 18px solid #ffe252;
           border-radius: 10px;
           transition: color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .card.shake {
+          animation: shake 0.6s;
+          animation-iteration-count: infinite;
         }
 
         .card:hover,
         .card:focus,
         .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
+          background-color: #21456e;
+          color: #01336e;
+          border-color: #01336e;
         }
 
         .card h3 {
@@ -185,7 +169,42 @@ export default function Home() {
         @media (max-width: 600px) {
           .grid {
             width: 100%;
-            flex-direction: column;
+          }
+        }
+
+        @keyframes shake {
+          0% {
+            transform: translate(6px, 6px) rotate(0deg);
+          }
+          10% {
+            transform: translate(-6px, -6px) rotate(-6deg);
+          }
+          20% {
+            transform: translate(-2px, 0px) rotate(6deg);
+          }
+          30% {
+            transform: translate(2px, 2px) rotate(0deg);
+          }
+          40% {
+            transform: translate(6px, -6px) rotate(6deg);
+          }
+          50% {
+            transform: translate(-6px, 2px) rotate(-6deg);
+          }
+          60% {
+            transform: translate(-2px, 6px) rotate(0deg);
+          }
+          70% {
+            transform: translate(2px, 6px) rotate(-6deg);
+          }
+          80% {
+            transform: translate(-6px, -6px) rotate(6deg);
+          }
+          90% {
+            transform: translate(6px, 2px) rotate(0deg);
+          }
+          100% {
+            transform: translate(6px, -2px) rotate(-6deg);
           }
         }
       `}</style>
@@ -205,5 +224,5 @@ export default function Home() {
         }
       `}</style>
     </div>
-  )
+  );
 }
